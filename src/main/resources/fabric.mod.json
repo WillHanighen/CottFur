@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "cottfur",
+  "version": "${version}",
+  "name": "CottFur",
+  "description": "Minecraft, but FURRIES!",
+  "authors": [],
+  "contact": {},
+  "license": "unlicense",
+  "icon": "assets/cottfur/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "xyz.cottageindustries.cottfur.client.CottfurDataGenerator"
+    ],
+    "client": [
+      "xyz.cottageindustries.cottfur.client.CottfurClient"
+    ],
+    "main": [
+      "xyz.cottageindustries.cottfur.Cottfur"
+    ]
+  },
+  "mixins": [
+    "cottfur.mixins.json",
+    {
+      "config": "cottfur.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-language-kotlin": ">=${kotlin_loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
