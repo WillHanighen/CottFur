@@ -1,0 +1,30 @@
+{
+  "gui.cottfur.customization.title": "Anthro Model Customization",
+  "gui.cottfur.tab.models": "Models",
+  "gui.cottfur.tab.colors": "Colors",
+  "gui.cottfur.tab.patterns": "Patterns",
+  "gui.cottfur.tab.import": "Import",
+  "gui.cottfur.apply": "Apply",
+  "gui.cottfur.color.primary": "Primary Color",
+  "gui.cottfur.color.secondary": "Secondary Color",
+  "gui.cottfur.color.accent": "Accent Color",
+  "gui.cottfur.presets": "Color Presets",
+  "gui.cottfur.import.texture": "Import Custom Texture",
+  "gui.cottfur.import.model": "Import Custom Model (BBModel)",
+  
+  "key.cottfur.open_customization": "Open Anthro Customization",
+  "category.cottfur.general": "CottFur",
+  
+  "model.cottfur.none": "None (Default Player)",
+  "model.cottfur.protogen": "Protogen",
+  "model.cottfur.k9": "Canine (K9)",
+  "model.cottfur.feline": "Feline",
+  "model.cottfur.anthro_base": "Basic Anthro",
+  
+  "pattern.cottfur.none": "No Pattern",
+  "pattern.cottfur.stripes": "Stripes",
+  "pattern.cottfur.spots": "Spots",
+  "pattern.cottfur.gradient": "Gradient",
+  "pattern.cottfur.twotone": "Two-Tone"
+}
+

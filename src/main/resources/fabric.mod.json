@@ -6,7 +6,7 @@
   "description": "Minecraft, but FURRIES!",
   "authors": [],
   "contact": {},
-  "license": "unlicense",
+  "license": "CC-BY-SA-4.0",
   "icon": "assets/cottfur/icon.png",
   "environment": "*",
   "entrypoints": {
@@ -31,6 +31,11 @@
     "fabricloader": ">=${loader_version}",
     "fabric-language-kotlin": ">=${kotlin_loader_version}",
     "fabric-api": "*",
-    "minecraft": "${minecraft_version}"
+    "minecraft": "${minecraft_version}",
+    "geckolib": ">=5.0"
+  },
+  "suggests": {
+    "modmenu": "*",
+    "cloth-config": "*"
   }
 }

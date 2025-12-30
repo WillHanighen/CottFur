@@ -4,6 +4,8 @@
   "package": "xyz.cottageindustries.cottfur.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "PlayerEntityRendererMixin",
+    "HeldItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
