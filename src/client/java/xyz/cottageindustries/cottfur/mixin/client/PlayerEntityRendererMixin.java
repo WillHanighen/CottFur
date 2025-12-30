@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import xyz.cottageindustries.cottfur.CottfurConstants;
 import xyz.cottageindustries.cottfur.client.model.AnthroModelType;
 import xyz.cottageindustries.cottfur.data.PlayerModelDataManager;
 
@@ -46,11 +47,7 @@ public abstract class PlayerEntityRendererMixin {
             var modelType = AnthroModelType.Companion.fromId(config.getModelTypeId());
             
             if (modelType.isAnthroModel()) {
-                // Player has an anthro model selected
-                // The actual rendering replacement will be implemented using:
-                // 1. A render layer that draws the anthro model on top
-                // 2. Or GeckoLib's GeoReplacedEntity system
-                // For now, this is just detection/preparation
+                CottfurConstants.LOGGER.info("debug string the sequel");
             }
         }
     }
