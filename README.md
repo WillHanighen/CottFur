@@ -22,10 +22,9 @@ A Minecraft Fabric mod that allows players to replace their default player model
 - Mod loads and initializes without crashes
 - 4 placeholder GeckoLib models with proper bone structure
 - Basic textures for all species (64x64)
-- Animation files (idle, walk, run, sneak, attack)
+- Animation files (idle, walk, run, sneak, attack)(**untested**)
 - Customization UI with model selection and color pickers
-- Client-server networking for model synchronization
-- Player model data persistence
+- Client-server networking for model synchronization(**untested**)
 - Keybind registration (G key for customization screen)
 
 ### 🚧 Needs Work
@@ -34,6 +33,7 @@ A Minecraft Fabric mod that allows players to replace their default player model
 - **Blockbench Models**: Placeholder geometry needs to be replaced with detailed models
 - **First-Person Arms**: Custom paw rendering in first-person view
 - **Texture Generation**: Procedural pattern/color application to textures
+- Player model data persistence
 
 ## Requirements
 
@@ -105,6 +105,7 @@ Contributions welcome! Particularly looking for help with:
 - GeckoLib 5.x rendering expertise
 - Blockbench model creation
 - Texture artists for species designs
+- dealing with mojangs bizarre rendering code
 
 ## License
 
@@ -114,3 +115,4 @@ This project is licensed under [CC-BY-SA-4.0](https://creativecommons.org/licens
 
 - Built with [Fabric](https://fabricmc.net/)
 - Animations powered by [GeckoLib](https://github.com/bernie-g/geckolib)
+- a dumb gay dog felt like helping a bit(Rocky)
