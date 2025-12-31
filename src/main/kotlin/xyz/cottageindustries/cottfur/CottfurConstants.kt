@@ -10,7 +10,8 @@ object CottfurConstants {
     const val MOD_ID = "cottfur"
     const val MOD_NAME = "CottFur"
     
-    @JvmStatic
+    //@JvmField
+    @JvmField
     val LOGGER = LoggerFactory.getLogger(MOD_NAME)
     
     /**

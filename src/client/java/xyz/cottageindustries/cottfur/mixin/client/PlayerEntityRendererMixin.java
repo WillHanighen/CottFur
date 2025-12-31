@@ -4,11 +4,17 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
 import net.minecraft.entity.PlayerLikeEntity;
+import net.minecraft.entity.player.PlayerSkinType;
+import net.minecraft.entity.player.SkinTextures;
+import net.minecraft.util.AssetInfo;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import xyz.cottageindustries.cottfur.CottfurConstants;
 import xyz.cottageindustries.cottfur.client.model.AnthroModelType;
 import xyz.cottageindustries.cottfur.data.PlayerModelDataManager;
 
@@ -25,6 +31,9 @@ import xyz.cottageindustries.cottfur.data.PlayerModelDataManager;
  */
 @Mixin(PlayerEntityRenderer.class)
 public abstract class PlayerEntityRendererMixin {
+
+    @Shadow
+    public abstract Identifier getTexture(PlayerEntityRenderState playerEntityRenderState);
 
     /**
      * Capture the player entity during updateRenderState
@@ -46,11 +55,8 @@ public abstract class PlayerEntityRendererMixin {
             var modelType = AnthroModelType.Companion.fromId(config.getModelTypeId());
             
             if (modelType.isAnthroModel()) {
-                // Player has an anthro model selected
-                // The actual rendering replacement will be implemented using:
-                // 1. A render layer that draws the anthro model on top
-                // 2. Or GeckoLib's GeoReplacedEntity system
-                // For now, this is just detection/preparation
+                //state.stuckArrowCount = 3; // a test
+                state.skinTextures = SkinTextures.create(new AssetInfo.TextureAssetInfo(Identifier.of("cottfur:entity/test")),null,null, PlayerSkinType.WIDE); // cooler test
             }
         }
     }

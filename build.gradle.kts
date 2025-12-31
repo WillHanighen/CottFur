@@ -79,7 +79,8 @@ dependencies {
     }
     
     // ModMenu for settings integration (optional at runtime)
-    modImplementation("com.terraformersmc:modmenu:${project.property("modmenu_version")}")
+    //TODO re-enable once modmenu donsnt crash like a little bich
+    //modImplementation("com.terraformersmc:modmenu:${project.property("modmenu_version")}")
 }
 
 tasks.processResources {
