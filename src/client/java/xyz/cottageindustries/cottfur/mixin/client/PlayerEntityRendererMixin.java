@@ -47,7 +47,7 @@ public abstract class PlayerEntityRendererMixin {
             var modelType = AnthroModelType.Companion.fromId(config.getModelTypeId());
             
             if (modelType.isAnthroModel()) {
-                CottfurConstants.LOGGER.info("debug string the sequel");
+                state.stuckArrowCount = 3; // test
             }
         }
     }
