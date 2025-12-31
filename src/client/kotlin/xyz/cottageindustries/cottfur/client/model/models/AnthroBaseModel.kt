@@ -4,12 +4,15 @@ import xyz.cottageindustries.cottfur.client.model.AnthroModel
 import xyz.cottageindustries.cottfur.client.model.AnthroModelType
 
 /**
- * Basic anthro model that serves as a template for custom models.
- * This is a simple bipedal anthro with basic features:
+ * Basic/generic anthro model serving as a template for custom designs.
+ * 
+ * This model provides a simple bipedal anthro base with:
  * - Human-like body proportions
  * - Simple round ears
  * - Basic tail
+ * - Standard bone hierarchy without species-specific additions
  * 
- * Users can customize this base model with their own textures.
+ * Intended for users who want to customize via textures without species-specific features.
+ * No additional unique bones beyond the standard set in [AnthroModel].
  */
 class AnthroBaseModel : AnthroModel(AnthroModelType.ANTHRO_BASE)

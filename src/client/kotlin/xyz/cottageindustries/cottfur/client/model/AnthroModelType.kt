@@ -4,8 +4,17 @@ import net.minecraft.util.Identifier
 import xyz.cottageindustries.cottfur.CottfurConstants
 
 /**
- * Enum representing the different anthro model types available in the mod.
- * Each type has a unique identifier and associated model/texture resources.
+ * Enum representing the different anthro model types (species) available in the mod.
+ * 
+ * Each type has:
+ * - A unique string identifier for network serialization and storage
+ * - A human-readable display name for the UI
+ * - Associated resource locations for models, textures, and animations
+ * 
+ * Use [NONE] to represent the default vanilla player model.
+ * 
+ * @property displayName Human-readable name shown in the customization UI
+ * @property modelId Unique string identifier used in configs and networking
  */
 enum class AnthroModelType(
     val displayName: String,
@@ -18,41 +27,59 @@ enum class AnthroModelType(
     ANTHRO_BASE("Basic Anthro", "anthro_base");
 
     /**
-     * Get the model resource location for this type
+     * Gets the GeckoLib geometry file location for this model type.
+     * 
+     * @return Identifier pointing to `assets/cottfur/geo/{modelId}.geo.json`
      */
     fun getModelLocation(): Identifier {
         return Identifier.of(CottfurConstants.MOD_ID, "geo/$modelId.geo.json")
     }
 
     /**
-     * Get the default texture resource location for this type
+     * Gets the default texture location for this model type.
+     * 
+     * Custom textures may override this via [PlayerModelConfig.customTextureId].
+     * 
+     * @return Identifier pointing to `assets/cottfur/textures/entity/{modelId}.png`
      */
     fun getDefaultTextureLocation(): Identifier {
         return Identifier.of(CottfurConstants.MOD_ID, "textures/entity/$modelId.png")
     }
 
     /**
-     * Get the animation resource location for this type
+     * Gets the GeckoLib animation file location for this model type.
+     * 
+     * @return Identifier pointing to `assets/cottfur/animations/{modelId}.animation.json`
      */
     fun getAnimationLocation(): Identifier {
         return Identifier.of(CottfurConstants.MOD_ID, "animations/$modelId.animation.json")
     }
 
     /**
-     * Check if this type represents an actual anthro model (not the default player)
+     * Checks if this type represents an actual anthro model.
+     * 
+     * @return `true` for all types except [NONE], which represents the vanilla player model
      */
     fun isAnthroModel(): Boolean = this != NONE
 
     companion object {
         /**
-         * Get a model type by its string ID
+         * Looks up a model type by its string identifier.
+         * 
+         * @param id The model ID string (e.g., "protogen", "k9")
+         * @return The matching [AnthroModelType], or [NONE] if not found
          */
         fun fromId(id: String): AnthroModelType {
             return entries.find { it.modelId == id } ?: NONE
         }
 
         /**
-         * Get all anthro model types (excluding NONE)
+         * Returns all model types that represent actual anthro models.
+         * 
+         * Excludes [NONE], which represents the default vanilla player.
+         * Useful for populating selection UIs.
+         * 
+         * @return List of all anthro model types
          */
         fun anthroTypes(): List<AnthroModelType> {
             return entries.filter { it.isAnthroModel() }

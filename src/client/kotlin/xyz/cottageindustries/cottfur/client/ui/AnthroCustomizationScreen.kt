@@ -14,27 +14,55 @@ import xyz.cottageindustries.cottfur.data.PlayerModelDataManager
 
 /**
  * Main customization screen for selecting and configuring anthro models.
- * Accessed via a button in the inventory screen or keybind.
+ * 
+ * This screen provides a tabbed interface for:
+ * - **Models**: Selecting the anthro species
+ * - **Colors**: Configuring primary, secondary, and accent colors
+ * - **Patterns**: Selecting fur patterns (WIP)
+ * - **Import**: Importing custom textures and models (WIP)
+ * 
+ * Access via the G keybind (default) or programmatically via [open].
+ * 
+ * @property parent The screen to return to when closed, or `null` for the game
  */
 class AnthroCustomizationScreen(private val parent: Screen?) : Screen(Text.translatable("gui.cottfur.customization.title")) {
     
-    // Current configuration being edited
+    // ========== Configuration State ==========
+    
+    /** The config being edited, loaded from PlayerModelDataManager on init. */
     private var currentConfig: PlayerModelConfig = PlayerModelConfig.DEFAULT
+    
+    /** Currently selected model type in the UI. */
     private var selectedModelType: AnthroModelType = AnthroModelType.NONE
     
-    // UI state
+    /** Currently active tab. */
     private var currentTab = Tab.MODEL_SELECT
     
-    // Color values
+    // ========== Color State ==========
+    
+    /** Primary body/fur color as RGB int. */
     private var primaryColor = 0xFFFFFF
+    
+    /** Secondary marking color as RGB int. */
     private var secondaryColor = 0x888888
+    
+    /** Accent/highlight color as RGB int. */
     private var accentColor = 0xFF0000
     
-    // UI elements
+    // ========== UI Elements ==========
+    
+    /** Buttons for model type selection, updated by [updateModelButtons]. */
     private val modelButtons = mutableListOf<ButtonWidget>()
+    
+    /** The "Apply" button at the bottom. */
     private var applyButton: ButtonWidget? = null
+    
+    /** The "Done" button at the bottom. */
     private var cancelButton: ButtonWidget? = null
     
+    /**
+     * Tab options for the customization screen.
+     */
     enum class Tab {
         MODEL_SELECT,
         COLORS,
@@ -207,6 +235,12 @@ class AnthroCustomizationScreen(private val parent: Screen?) : Screen(Text.trans
         }
     }
     
+    /**
+     * Applies the current UI selections and sends them to the server.
+     * 
+     * Updates local [PlayerModelDataManager], sends network packet via
+     * [CottfurClientNetworking.sendModelUpdate], and closes the screen.
+     */
     private fun applyChanges() {
         val player = MinecraftClient.getInstance().player ?: return
         
@@ -269,7 +303,10 @@ class AnthroCustomizationScreen(private val parent: Screen?) : Screen(Text.trans
     
     companion object {
         /**
-         * Open the customization screen
+         * Opens the customization screen from anywhere.
+         * 
+         * Creates a new [AnthroCustomizationScreen] with the current screen as parent.
+         * Safe to call when a screen is already open.
          */
         fun open() {
             val client = MinecraftClient.getInstance()

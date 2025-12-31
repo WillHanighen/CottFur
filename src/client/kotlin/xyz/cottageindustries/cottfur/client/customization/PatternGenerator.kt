@@ -3,14 +3,26 @@ package xyz.cottageindustries.cottfur.client.customization
 import xyz.cottageindustries.cottfur.CottfurConstants
 
 /**
- * Defines available patterns and their configurations for anthro model textures.
- * Pattern rendering will be handled through shader-based color tinting
- * rather than direct texture manipulation.
+ * Defines available fur patterns and color utilities for anthro model textures.
+ * 
+ * This object provides:
+ * - Enum of available pattern types with display names
+ * - Pattern configuration data class
+ * - Color manipulation utilities (blending, hex conversion)
+ * 
+ * ## Implementation Note
+ * Pattern rendering is designed to use shader-based color tinting rather than
+ * direct texture manipulation, allowing dynamic color changes without texture regeneration.
  */
 object PatternGenerator {
     
     /**
-     * Available pattern types.
+     * Available fur pattern types.
+     * 
+     * Each pattern has a display name for UI and a string ID for storage/networking.
+     * 
+     * @property displayName Human-readable name for the customization UI
+     * @property id Unique string identifier for config storage
      */
     enum class PatternType(val displayName: String, val id: String) {
         NONE("No Pattern", "none"),
@@ -33,8 +45,17 @@ object PatternGenerator {
     }
     
     /**
-     * Configuration for pattern generation.
-     * These values are stored and sent to the rendering system.
+     * Configuration for pattern generation and rendering.
+     * 
+     * Contains all parameters needed to render a pattern on an anthro model,
+     * including colors, pattern type, and rendering parameters.
+     * 
+     * @property type The pattern type to apply
+     * @property primaryColor Primary body color as packed RGB
+     * @property secondaryColor Secondary marking color as packed RGB
+     * @property accentColor Accent highlight color as packed RGB
+     * @property intensity Pattern visibility (0.0 = invisible, 1.0 = full)
+     * @property scale Pattern size multiplier (1.0 = default)
      */
     data class PatternConfig(
         val type: PatternType = PatternType.NONE,
@@ -72,7 +93,12 @@ object PatternGenerator {
     }
     
     /**
-     * Blend two colors based on a factor (0.0 = color1, 1.0 = color2).
+     * Linearly interpolates between two RGB colors.
+     * 
+     * @param color1 The starting color (returned when factor = 0.0)
+     * @param color2 The ending color (returned when factor = 1.0)
+     * @param factor Blend factor between 0.0 and 1.0
+     * @return The blended color as a packed RGB integer
      */
     fun blendColors(color1: Int, color2: Int, factor: Float): Int {
         val r1 = (color1 shr 16) and 0xFF
@@ -91,7 +117,12 @@ object PatternGenerator {
     }
     
     /**
-     * Convert a hex color string to an integer.
+     * Parses a hex color string to a packed RGB integer.
+     * 
+     * Accepts formats: "#RRGGBB", "0xRRGGBB", or "RRGGBB"
+     * 
+     * @param hex The hex color string
+     * @return The parsed color, or 0xFFFFFF (white) if parsing fails
      */
     fun parseColor(hex: String): Int {
         val cleanHex = hex.removePrefix("#").removePrefix("0x")
@@ -104,7 +135,10 @@ object PatternGenerator {
     }
     
     /**
-     * Convert an integer color to a hex string.
+     * Converts a packed RGB integer to a hex color string.
+     * 
+     * @param color The color as packed RGB (0xRRGGBB)
+     * @return Hex string in format "#RRGGBB"
      */
     fun colorToHex(color: Int): String {
         return String.format("#%06X", color and 0xFFFFFF)

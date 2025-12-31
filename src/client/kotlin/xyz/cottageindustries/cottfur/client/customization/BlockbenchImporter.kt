@@ -11,12 +11,33 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 /**
- * Importer for Blockbench .bbmodel files.
- * Converts Blockbench models to GeckoLib-compatible format for use in-game.
+ * Importer for Blockbench `.bbmodel` files.
+ * 
+ * This singleton handles importing Blockbench model files and converting them
+ * to GeckoLib-compatible `.geo.json` format for use as custom anthro models.
+ * 
+ * ## Storage Location
+ * Models are stored in: `{minecraft}/config/cottfur/models/`
+ * Both the original `.bbmodel` and converted `.geo.json` are saved.
+ * 
+ * ## Required Bones
+ * Imported models must have the following bones for player model compatibility:
+ * - `head`, `body`, `left_arm`, `right_arm`, `left_leg`, `right_leg`
+ * 
+ * ## Conversion Process
+ * 1. Parse Blockbench JSON structure
+ * 2. Validate bone hierarchy
+ * 3. Convert outliner → GeckoLib bones
+ * 4. Convert elements → cubes
+ * 5. Generate unique model ID
+ * 6. Save both formats
  */
 object BlockbenchImporter {
     
-    // Directory for storing imported custom models
+    /** 
+     * Directory for storing imported custom models.
+     * Created lazily on first access.
+     */
     private val CUSTOM_MODEL_DIR: Path by lazy {
         val configDir = MinecraftClient.getInstance().runDirectory.toPath()
             .resolve("config")
@@ -30,14 +51,30 @@ object BlockbenchImporter {
     
     /**
      * Result of a model import operation.
+     * 
+     * Sealed class with two variants:
+     * - [Success]: Contains the generated model ID, name, and bone count
+     * - [Error]: Contains a human-readable error message
      */
     sealed class ImportResult {
+        /**
+         * Successful import result.
+         * 
+         * @property modelId The generated unique model identifier
+         * @property modelName The original model name from the file
+         * @property boneCount Number of bones in the model hierarchy
+         */
         data class Success(
             val modelId: String,
             val modelName: String,
             val boneCount: Int
         ) : ImportResult()
         
+        /**
+         * Failed import result with error message.
+         * 
+         * @property message Human-readable error description
+         */
         data class Error(val message: String) : ImportResult()
     }
     
@@ -47,10 +84,13 @@ object BlockbenchImporter {
     private const val SUPPORTED_FORMAT = "bedrock"
     
     /**
-     * Import a Blockbench .bbmodel file.
+     * Imports a Blockbench `.bbmodel` file and converts it to GeckoLib format.
      * 
-     * @param file The .bbmodel file to import
-     * @return ImportResult indicating success or failure
+     * Validates the file, parses the Blockbench JSON structure, checks for required
+     * bones, converts to GeckoLib geo.json format, and saves both files.
+     * 
+     * @param file The `.bbmodel` file to import
+     * @return [ImportResult.Success] with model info, or [ImportResult.Error] with message
      */
     fun importModel(file: File): ImportResult {
         // Validate file
@@ -353,7 +393,11 @@ object BlockbenchImporter {
     }
     
     /**
-     * List all imported custom models.
+     * Lists all imported custom model IDs.
+     * 
+     * Scans the model storage directory for `.geo.json` files.
+     * 
+     * @return List of model IDs (filenames without `.geo.json` suffix)
      */
     fun listImportedModels(): List<String> {
         return CUSTOM_MODEL_DIR.toFile()
@@ -363,7 +407,12 @@ object BlockbenchImporter {
     }
     
     /**
-     * Delete an imported model.
+     * Deletes an imported model and its source file.
+     * 
+     * Removes both the `.geo.json` and original `.bbmodel` files.
+     * 
+     * @param modelId The model ID to delete
+     * @return `true` if any files were deleted, `false` if model wasn't found
      */
     fun deleteModel(modelId: String): Boolean {
         val geoFile = CUSTOM_MODEL_DIR.resolve("$modelId.geo.json").toFile()

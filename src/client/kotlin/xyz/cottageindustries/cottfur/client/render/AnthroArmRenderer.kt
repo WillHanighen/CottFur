@@ -11,11 +11,18 @@ import xyz.cottageindustries.cottfur.data.PlayerModelDataManager
 
 /**
  * Handles rendering of custom first-person arms/paws for anthro models.
- * This replaces the default player arms when an anthro model is active.
+ * 
+ * This object manages the replacement of vanilla player arms with anthro paws
+ * in first-person view. It provides:
+ * - Detection of when anthro arms should be rendered
+ * - Texture lookup for arm models
+ * - Rendering entry point (currently stub)
+ * 
+ * Works in conjunction with [HeldItemRendererMixin] to intercept vanilla arm rendering.
  */
 object AnthroArmRenderer {
     
-    // Arm model textures for each model type
+    /** Maps model types to their arm texture resource locations. */
     private val armTextures = mapOf(
         AnthroModelType.PROTOGEN to CottfurConstants.id("textures/entity/protogen_arm.png"),
         AnthroModelType.K9 to CottfurConstants.id("textures/entity/k9_arm.png"),
@@ -24,7 +31,9 @@ object AnthroArmRenderer {
     )
     
     /**
-     * Check if the local player should use anthro arms in first-person.
+     * Checks if the local player should use anthro arms in first-person view.
+     * 
+     * @return `true` if the local player has an anthro model selected
      */
     fun shouldRenderAnthroArms(): Boolean {
         val player = MinecraftClient.getInstance().player ?: return false
@@ -33,7 +42,9 @@ object AnthroArmRenderer {
     }
     
     /**
-     * Get the model type for the local player's arms.
+     * Gets the model type configured for the local player.
+     * 
+     * @return The player's [AnthroModelType], or [AnthroModelType.NONE] if not set
      */
     fun getLocalPlayerModelType(): AnthroModelType {
         val player = MinecraftClient.getInstance().player ?: return AnthroModelType.NONE
@@ -42,21 +53,26 @@ object AnthroArmRenderer {
     }
     
     /**
-     * Get the texture identifier for the specified arm and model type.
+     * Gets the arm texture identifier for a model type.
+     * 
+     * @param modelType The model type to get the arm texture for
+     * @return The arm texture identifier, or `null` if no arm texture is defined
      */
     fun getArmTexture(modelType: AnthroModelType): Identifier? {
         return armTextures[modelType]
     }
     
     /**
-     * Render a custom first-person arm.
-     * This is called by a mixin that intercepts the vanilla arm rendering.
+     * Renders a custom first-person arm/paw.
+     * 
+     * Called by [HeldItemRendererMixin] when intercepting vanilla arm rendering.
+     * Currently a stub that sets up transformations but falls back to vanilla.
      * 
      * @param matrices The matrix stack for transformations
-     * @param vertexConsumers The vertex consumer provider
-     * @param light The packed light value
-     * @param arm Which arm to render (main hand or off hand)
-     * @return true if custom arm was rendered, false to fall back to vanilla
+     * @param vertexConsumers The vertex consumer provider for rendering
+     * @param light The packed lightmap coordinates
+     * @param arm Which arm to render ([Arm.LEFT] or [Arm.RIGHT])
+     * @return `true` if custom arm was rendered, `false` to fall back to vanilla
      */
     fun renderFirstPersonArm(
         matrices: MatrixStack,
@@ -107,7 +123,13 @@ object AnthroArmRenderer {
     }
     
     /**
-     * Configuration for arm appearance.
+     * Configuration data for arm appearance.
+     * 
+     * @property modelType The anthro species for this arm
+     * @property primaryColor Primary fur color as packed RGB
+     * @property secondaryColor Secondary marking color as packed RGB
+     * @property hasClaws Whether to render claws on the paw
+     * @property pawPads Whether to render paw pads
      */
     data class ArmConfig(
         val modelType: AnthroModelType,
@@ -118,7 +140,12 @@ object AnthroArmRenderer {
     )
     
     /**
-     * Get arm configuration for the local player.
+     * Gets the arm configuration for the local player.
+     * 
+     * Retrieves the player's model config and creates an [ArmConfig] with
+     * the relevant arm rendering parameters.
+     * 
+     * @return Arm configuration derived from the player's model settings
      */
     fun getLocalArmConfig(): ArmConfig {
         val player = MinecraftClient.getInstance().player ?: return ArmConfig(AnthroModelType.NONE)

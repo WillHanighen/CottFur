@@ -14,15 +14,32 @@ import java.util.UUID
 
 /**
  * Main networking handler for CottFur.
- * Handles registration and processing of all mod network packets.
+ * 
+ * This object handles registration and processing of all network packets used
+ * for synchronizing player model data between clients and the server.
+ * 
+ * ## Packet Flow
+ * 
+ * **Client → Server:**
+ * - [UpdateModelPayload]: Sent when a player changes their model configuration
+ * 
+ * **Server → Client:**
+ * - [SyncAllModelsPayload]: Sent to a newly joined player with all existing configs
+ * - [SyncSingleModelPayload]: Broadcast to all players when someone changes their model
+ * 
+ * @see CottfurClientNetworking for client-side packet handling
  */
 object CottfurNetworking {
     
-    // Packet IDs
+    /** Packet ID for client-to-server model updates. */
     val UPDATE_MODEL_ID: CustomPayload.Id<UpdateModelPayload> = 
         CustomPayload.Id(CottfurConstants.id("update_model"))
+    
+    /** Packet ID for server-to-client bulk sync on join. */
     val SYNC_ALL_MODELS_ID: CustomPayload.Id<SyncAllModelsPayload> = 
         CustomPayload.Id(CottfurConstants.id("sync_all_models"))
+    
+    /** Packet ID for server-to-client single player sync. */
     val SYNC_SINGLE_MODEL_ID: CustomPayload.Id<SyncSingleModelPayload> = 
         CustomPayload.Id(CottfurConstants.id("sync_single_model"))
     
@@ -81,7 +98,17 @@ object CottfurNetworking {
 }
 
 /**
- * Payload sent from client to server when a player updates their model.
+ * Payload sent from client to server when a player updates their model configuration.
+ * 
+ * The server receives this, stores the config in [PlayerModelDataManager], and broadcasts
+ * a [SyncSingleModelPayload] to all other connected players.
+ * 
+ * @property modelTypeId The string ID of the selected model type (e.g., "protogen", "none")
+ * @property customTextureId Optional custom texture identifier, or null for default
+ * @property primaryColor Primary color as packed RGB integer
+ * @property secondaryColor Secondary color as packed RGB integer
+ * @property accentColor Accent color as packed RGB integer
+ * @property patternId Optional pattern identifier, or null for no pattern
  */
 data class UpdateModelPayload(
     val modelTypeId: String,
@@ -116,8 +143,13 @@ data class UpdateModelPayload(
 }
 
 /**
- * Payload sent from server to client to sync all players' model data.
- * Sent when a player joins the server.
+ * Payload sent from server to client to sync all players' model configurations.
+ * 
+ * Sent when a player joins the server, containing the model configs of all
+ * currently connected players. The client clears its local cache and replaces
+ * it with this data.
+ * 
+ * @property playerConfigs Map of player UUID strings to their model configurations
  */
 data class SyncAllModelsPayload(
     val playerConfigs: Map<String, PlayerModelConfig>
@@ -168,8 +200,18 @@ data class SyncAllModelsPayload(
 }
 
 /**
- * Payload sent from server to client to sync a single player's model data.
- * Sent when any player changes their model.
+ * Payload sent from server to client to sync a single player's model configuration.
+ * 
+ * Broadcast to all connected players (except the one who made the change) whenever
+ * a player updates their model configuration. Allows real-time model updates in multiplayer.
+ * 
+ * @property playerUuid The UUID of the player whose config changed (as a string)
+ * @property modelTypeId The string ID of the selected model type
+ * @property customTextureId Optional custom texture identifier
+ * @property primaryColor Primary color as packed RGB integer
+ * @property secondaryColor Secondary color as packed RGB integer
+ * @property accentColor Accent color as packed RGB integer
+ * @property patternId Optional pattern identifier
  */
 data class SyncSingleModelPayload(
     val playerUuid: String,

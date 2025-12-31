@@ -10,13 +10,22 @@ import xyz.cottageindustries.cottfur.client.ui.AnthroCustomizationScreen
 
 /**
  * Handles keybind registration and processing for CottFur.
+ * 
+ * Registered keybinds:
+ * - **G** (default): Opens the anthro model customization screen
+ * 
+ * Keybinds are processed every client tick via [ClientTickEvents.END_CLIENT_TICK].
  */
 object CottfurKeybinds {
     
+    /** The keybind for opening the customization screen. Lateinit, set in [register]. */
     private lateinit var openCustomizationKey: KeyBinding
     
     /**
-     * Register all keybinds. Call during client initialization.
+     * Registers all CottFur keybinds with Fabric's keybind system.
+     * 
+     * Must be called during client initialization ([CottfurClient.onInitializeClient]).
+     * Sets up a tick event listener to poll key states and trigger actions.
      */
     fun register() {
         CottfurConstants.LOGGER.info("Registering CottFur keybinds...")

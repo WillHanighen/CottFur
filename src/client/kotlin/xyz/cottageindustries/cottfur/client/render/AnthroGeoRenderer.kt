@@ -9,28 +9,55 @@ import xyz.cottageindustries.cottfur.client.model.AnthroPlayerAnimatable
 import xyz.cottageindustries.cottfur.data.PlayerModelDataManager
 
 /**
- * Renderer for anthro player models.
+ * Main renderer for anthro player models using GeckoLib.
  * 
- * TODO: Complete GeckoLib integration
- * Currently this is a stub that logs when rendering should happen
- * but falls back to vanilla rendering.
+ * This singleton handles the actual rendering of anthro models in place of the
+ * vanilla player model. It maintains a cache of [AnthroPlayerAnimatable] instances
+ * per model type for animation state management.
+ * 
+ * ## Current Status
+ * This is currently a **stub implementation**. It detects when anthro rendering
+ * should occur and logs it, but returns `false` to fall back to vanilla rendering.
+ * Full GeckoLib 5.4 rendering integration is pending.
+ * 
+ * ## TODO
+ * - Implement actual GeckoLib 5.4 rendering
+ * - Handle GeoBone internal structure differences from GeckoLib 4.x
  */
 object AnthroGeoRenderer {
     
+    /** Cache of animatable instances per model type. */
     private val animatables = mutableMapOf<AnthroModelType, AnthroPlayerAnimatable>()
+    
+    /** Flag to only log the "rendering triggered" message once per session. */
     private var loggedOnce = false
     
     /**
-     * Get or create an animatable for the given model type
+     * Gets or creates an [AnthroPlayerAnimatable] for the given model type.
+     * 
+     * @param type The model type to get an animatable for
+     * @return Cached or newly created animatable instance
      */
     private fun getAnimatable(type: AnthroModelType): AnthroPlayerAnimatable {
         return animatables.getOrPut(type) { AnthroPlayerAnimatable(type) }
     }
     
     /**
-     * Render an anthro model for a player
+     * Attempts to render an anthro model for a player entity.
      * 
-     * @return true if rendering was successful, false to fall back to vanilla
+     * This method checks if the player has an anthro model configured and, if so,
+     * should render that model instead of the vanilla player model.
+     * 
+     * ## Current Behavior
+     * Currently a stub that logs when rendering is triggered and returns `false`
+     * to fall back to vanilla rendering.
+     * 
+     * @param player The player entity being rendered
+     * @param matrices The matrix stack for transformations
+     * @param vertexConsumers The vertex consumer provider for rendering
+     * @param light The packed lightmap coordinates
+     * @param partialTicks The partial tick time for interpolation
+     * @return `true` if anthro model was rendered, `false` to use vanilla rendering
      */
     fun renderAnthroPlayer(
         player: AbstractClientPlayerEntity,

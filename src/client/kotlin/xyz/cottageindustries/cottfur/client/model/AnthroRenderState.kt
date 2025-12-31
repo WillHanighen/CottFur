@@ -3,62 +3,51 @@ package xyz.cottageindustries.cottfur.client.model
 import net.minecraft.util.Identifier
 
 /**
- * Simple render state for anthro models.
- * Carries data between the animatable and the renderer.
+ * Mutable render state container for anthro models.
+ * 
+ * This class carries data from the player entity to the renderer, including:
+ * - Model type and texture information
+ * - Head/body rotation for look-at animations
+ * - Limb swing values for walking/running animations
+ * - State flags (sprinting, sneaking, swimming)
+ * 
+ * Instances are typically reused and [reset] between renders to avoid allocations.
  */
 class AnthroRenderState {
-    /**
-     * The model type being rendered
-     */
+    /** The anthro species being rendered. */
     var modelType: AnthroModelType = AnthroModelType.NONE
     
-    /**
-     * Optional custom texture, null means use default for model type
-     */
+    /** Custom texture override, or `null` to use the model type's default texture. */
     var customTexture: Identifier? = null
     
-    /**
-     * Head pitch for look-at animation
-     */
+    /** Head pitch (up/down) in degrees for look-at animation. */
     var headPitch: Float = 0f
     
-    /**
-     * Head yaw for look-at animation
-     */
+    /** Head yaw (left/right) in degrees for look-at animation. */
     var headYaw: Float = 0f
     
-    /**
-     * Body yaw rotation
-     */
+    /** Body yaw rotation in degrees. */
     var bodyYaw: Float = 0f
     
-    /**
-     * Limb swing amount (for walking animation)
-     */
+    /** Limb swing amount (0.0 = still, higher = faster movement). */
     var limbSwingAmount: Float = 0f
     
-    /**
-     * Limb swing phase (for walking animation)
-     */
+    /** Limb swing phase for animation cycling. */
     var limbSwing: Float = 0f
     
-    /**
-     * Whether the entity is sprinting
-     */
+    /** Whether the entity is currently sprinting. */
     var isSprinting: Boolean = false
     
-    /**
-     * Whether the entity is sneaking
-     */
+    /** Whether the entity is currently sneaking/crouching. */
     var isSneaking: Boolean = false
     
-    /**
-     * Whether the entity is swimming
-     */
+    /** Whether the entity is currently swimming. */
     var isSwimming: Boolean = false
     
     /**
-     * Reset state for reuse
+     * Resets all fields to default values for reuse.
+     * 
+     * Call this before populating with new entity data to ensure clean state.
      */
     fun reset() {
         modelType = AnthroModelType.NONE

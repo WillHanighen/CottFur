@@ -13,14 +13,28 @@ import java.util.UUID
 
 /**
  * Client-side networking handler for CottFur.
- * Handles receiving model sync packets and sending model updates.
+ * 
+ * This object handles:
+ * - Registering receivers for server-to-client sync packets
+ * - Sending model update packets to the server
+ * - Checking server compatibility
+ * 
+ * ## Received Packets
+ * - [SyncAllModelsPayload]: Full sync on server join
+ * - [SyncSingleModelPayload]: Single player update broadcast
+ * 
+ * ## Sent Packets
+ * - [UpdateModelPayload]: Local player model changes
+ * 
+ * @see CottfurNetworking for packet definitions and server-side handling
  */
 object CottfurClientNetworking {
     
     /**
-     * Register client-side packet handlers.
-     * Call this during client mod initialization.
-     * Note: Payload types are registered in CottfurNetworking on the common side.
+     * Registers client-side packet receivers with Fabric's networking API.
+     * 
+     * Must be called during client mod initialization ([CottfurClient.onInitializeClient]).
+     * Payload types are already registered on the common side in [CottfurNetworking].
      */
     fun registerClientPackets() {
         CottfurConstants.LOGGER.info("Registering CottFur client packets...")
@@ -72,8 +86,13 @@ object CottfurClientNetworking {
     }
     
     /**
-     * Send a model update to the server.
-     * Call this when the local player changes their model configuration.
+     * Sends the local player's model configuration to the server.
+     * 
+     * Called when the player applies changes in the customization screen.
+     * If the server doesn't have CottFur installed (checked via [isServerSupported]),
+     * the packet is not sent and a warning is logged.
+     * 
+     * @param config The new model configuration to send
      */
     fun sendModelUpdate(config: PlayerModelConfig) {
         if (!ClientPlayNetworking.canSend(CottfurNetworking.UPDATE_MODEL_ID)) {
@@ -95,7 +114,12 @@ object CottfurClientNetworking {
     }
     
     /**
-     * Check if the server supports CottFur networking.
+     * Checks if the connected server supports CottFur networking.
+     * 
+     * Uses Fabric's networking API to check if the server can receive our packets.
+     * Returns `false` if in singleplayer or on a vanilla/non-CottFur server.
+     * 
+     * @return `true` if the server has CottFur installed and can receive model updates
      */
     fun isServerSupported(): Boolean {
         return ClientPlayNetworking.canSend(CottfurNetworking.UPDATE_MODEL_ID)

@@ -10,11 +10,27 @@ import java.util.UUID
 
 /**
  * Manages custom textures uploaded by players.
- * Handles validation, storage, and tracking of custom texture files.
+ * 
+ * This singleton handles:
+ * - Validation of uploaded texture files (size, format, dimensions)
+ * - Storage of textures in the config directory
+ * - Tracking of registered texture IDs
+ * - Retrieval of stored textures
+ * 
+ * ## Storage Location
+ * Textures are stored in: `{minecraft}/config/cottfur/textures/`
+ * 
+ * ## Constraints
+ * - Format: PNG only
+ * - Max file size: 1MB
+ * - Expected dimensions: 64×64 pixels (standard player skin size)
  */
 object TextureManager {
     
-    // Directory for storing custom textures
+    /** 
+     * Directory for storing custom textures.
+     * Created lazily on first access.
+     */
     private val CUSTOM_TEXTURE_DIR: Path by lazy {
         val configDir = MinecraftClient.getInstance().runDirectory.toPath()
             .resolve("config")
@@ -35,18 +51,28 @@ object TextureManager {
     private const val MAX_FILE_SIZE = 1024 * 1024L
     
     /**
-     * Result of a texture validation/load operation.
+     * Result of a texture import operation.
+     * 
+     * Sealed class with two variants:
+     * - [Success]: Contains the generated texture ID and resource identifier
+     * - [Error]: Contains an error message explaining the failure
      */
     sealed class TextureResult {
+        /** Successful import with generated texture ID and resource identifier. */
         data class Success(val textureId: String, val identifier: Identifier) : TextureResult()
+        
+        /** Failed import with human-readable error message. */
         data class Error(val message: String) : TextureResult()
     }
     
     /**
-     * Validate and copy a custom texture file.
+     * Validates and imports a custom texture file.
      * 
-     * @param file The PNG file to load
-     * @return TextureResult indicating success or failure
+     * Validates the file (existence, size, format), generates a unique ID,
+     * copies to the storage directory, and returns the resource identifier.
+     * 
+     * @param file The PNG file to import
+     * @return [TextureResult.Success] with texture ID and identifier, or [TextureResult.Error] with message
      */
     fun loadCustomTexture(file: File): TextureResult {
         // Validate file exists and is readable
@@ -87,7 +113,10 @@ object TextureManager {
     }
     
     /**
-     * Get the file path for a stored texture.
+     * Gets the file system path for a stored texture.
+     * 
+     * @param textureId The texture ID to look up
+     * @return The file if it exists, or `null` if not found
      */
     fun getStoredTexturePath(textureId: String): File? {
         val file = CUSTOM_TEXTURE_DIR.resolve("$textureId.png").toFile()
@@ -95,21 +124,30 @@ object TextureManager {
     }
     
     /**
-     * Get the identifier for a stored custom texture.
+     * Creates a resource identifier for a stored custom texture.
+     * 
+     * @param textureId The texture ID
+     * @return Identifier in the format `cottfur:textures/custom/{textureId}`
      */
     fun getTextureIdentifier(textureId: String): Identifier {
         return CottfurConstants.id("textures/custom/$textureId")
     }
     
     /**
-     * Check if a texture exists.
+     * Checks if a texture with the given ID exists in storage.
+     * 
+     * @param textureId The texture ID to check
+     * @return `true` if the texture file exists
      */
     fun textureExists(textureId: String): Boolean {
         return CUSTOM_TEXTURE_DIR.resolve("$textureId.png").toFile().exists()
     }
     
     /**
-     * Delete a custom texture.
+     * Deletes a custom texture from storage.
+     * 
+     * @param textureId The texture ID to delete
+     * @return `true` if the file was deleted, `false` if it didn't exist
      */
     fun deleteTexture(textureId: String): Boolean {
         val file = CUSTOM_TEXTURE_DIR.resolve("$textureId.png").toFile()
@@ -124,7 +162,11 @@ object TextureManager {
     }
     
     /**
-     * List all stored custom textures.
+     * Lists all stored custom texture IDs.
+     * 
+     * Scans the texture storage directory for PNG files.
+     * 
+     * @return List of texture IDs (filenames without extension)
      */
     fun listStoredTextures(): List<String> {
         return CUSTOM_TEXTURE_DIR.toFile()
