@@ -2,6 +2,7 @@ package xyz.cottageindustries.cottfur.client
 
 import net.fabricmc.api.ClientModInitializer
 import xyz.cottageindustries.cottfur.CottfurConstants
+import xyz.cottageindustries.cottfur.client.debugShit.DebugShitInit
 import xyz.cottageindustries.cottfur.client.model.ModelRegistry
 import xyz.cottageindustries.cottfur.client.network.CottfurClientNetworking
 
@@ -38,7 +39,10 @@ class CottfurClient : ClientModInitializer {
         
         // Register keybinds
         CottfurKeybinds.register()
-        
+
+        // Register debug shit. DELETE ME!!!!
+        DebugShitInit().debugShitInit()
+
         CottfurConstants.LOGGER.info("CottFur client initialization complete!")
     }
 }

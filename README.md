@@ -23,9 +23,10 @@ A Minecraft Fabric mod that allows players to replace their default player model
 - 4 placeholder GeckoLib models with proper bone structure
 - Basic textures for all species (64x64)
 - Animation files (idle, walk, run, sneak, attack)(**untested**)
-- Customization UI with model selection and color pickers
-- Client-server networking for model synchronization(**untested**)
+- Customization UI with model selection
+- Client-server networking for model synchronization(**kinda tested**)
 - Keybind registration (G key for customization screen)
+- Player model data persistence
 
 ### 🚧 Needs Work
 
@@ -33,7 +34,7 @@ A Minecraft Fabric mod that allows players to replace their default player model
 - **Blockbench Models**: Placeholder geometry needs to be replaced with detailed models
 - **First-Person Arms**: Custom paw rendering in first-person view
 - **Texture Generation**: Procedural pattern/color application to textures
-- Player model data persistence
+- Customization UI color pickers, pattern selectors and model imports
 
 ## Requirements
 
@@ -62,7 +63,8 @@ src/
 │   │   ├── Cottfur.kt              # Main mod entrypoint
 │   │   ├── CottfurConstants.kt     # Shared constants
 │   │   ├── data/                   # Player data management
-│   │   └── network/                # Server-side networking
+│   │   ├── network/                # Server-side networking
+│   │   └── commands/               # Server commands
 │   └── resources/
 │       └── assets/cottfur/
 │           ├── geo/                # GeckoLib model files (.geo.json)
@@ -78,6 +80,7 @@ src/
 │   │   ├── ui/                     # Customization screens
 │   │   ├── animation/              # Animation controllers
 │   │   ├── customization/          # Texture/pattern generation
+│   │   ├── debugShit/              # Debug shit™
 │   │   └── network/                # Client networking
 │   └── java/.../mixin/client/      # Client-side mixins
 ```
