@@ -10,7 +10,7 @@ A Minecraft Fabric mod that allows players to replace their default player model
 
 - **Multiple Species**: Choose from Protogen, Canine (K9), Feline, or a basic Anthro base model
 - **Customization Screen**: Press `G` to open the model customization UI
-- **Color Customization**: Primary, secondary, and accent color options
+- **Color Customization**: Primary, secondary, and accent color options (WIP)
 - **Pattern Support**: Stripes, spots, gradients, and more (WIP)
 - **Custom Texture Import**: Upload your own textures (WIP)
 - **Multiplayer Support**: Other players see your anthro model when the server has the mod installed
@@ -20,7 +20,7 @@ A Minecraft Fabric mod that allows players to replace their default player model
 ### ✅ Implemented
 
 - Mod loads and initializes without crashes
-- 4 placeholder GeckoLib models with proper bone structure
+- 4 placeholder GeckoLib models with proper bone structure (**untested**)
 - Basic textures for all species (64x64)
 - Animation files (idle, walk, run, sneak, attack)(**untested**)
 - Customization UI with model selection
