@@ -118,4 +118,7 @@ This project is licensed under [CC-BY-NC-SA 4.0](https://creativecommons.org/lic
 
 - Built with [Fabric](https://fabricmc.net/)
 - Animations powered by [GeckoLib](https://github.com/bernie-g/geckolib)
-- a dumb gay dog felt like helping a bit(Rocky)
+
+### contributors
+
+- [Rocky Stan](https://github.com/RockyStan)
