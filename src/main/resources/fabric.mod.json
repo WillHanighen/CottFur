@@ -6,7 +6,7 @@
   "description": "Minecraft, but FURRIES!",
   "authors": ["iCottage", "RockyStan"],
   "contact": {},
-  "license": "CC-BY-SA-4.0",
+  "license": "CC-BY-NC-SA 4.0",
   "icon": "assets/cottfur/icon.png",
   "environment": "*",
   "entrypoints": {

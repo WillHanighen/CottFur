@@ -112,7 +112,7 @@ Contributions welcome! Particularly looking for help with:
 
 ## License
 
-This project is licensed under [CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+This project is licensed under [CC-BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
 ## Credits
 
